@@ -4,7 +4,7 @@ from app.services.agora_service import AgoraService
 from app.models import BaseApiResponse
 import time
 
-app = FastAPI(title="Afrodoctor Call Service")
+app = FastAPI(title="AfroDoctor Call Service")
 
 # --- CORS Configuration ---
 app.add_middleware(
@@ -36,11 +36,12 @@ async def join_call(call_id: int):
             success=True,
             message="Join details generated successfully",
             data={
-                "token": agora_data["token"],
-                "uid": agora_data["uid"],
-                "appId": agora_data["appId"],
-                "channelName": channel_name,
-                "callType": "video"
+                "call_id": call_id,            
+                "channel_name": channel_name,  
+                "token": agora_data["token"],  
+                "app_id": agora_data["appId"], 
+                "uid": agora_data["uid"],      
+                "call_type": "video"           
             }
         )
     except Exception as e:
