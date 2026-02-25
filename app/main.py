@@ -1,9 +1,19 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.services.agora_service import AgoraService
 from app.models import BaseApiResponse
 import time
 
-app = FastAPI(title="AfroDoctor Call Service")
+app = FastAPI(title="Afrodoctor Call Service")
+
+# --- CORS Configuration ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"],
+)
 
 # In-memory store: { call_id: { "start_time": timestamp, "status": "active" } }
 active_calls = {}
@@ -14,12 +24,9 @@ def health_check():
 
 @app.post("/calls/{call_id}/join", response_model=BaseApiResponse)
 async def join_call(call_id: int):
-    # For a real app, we'd check if the call_id exists in a DB.
-    # Here, we just generate the token for any call_id provided.
     channel_name = f"channel_{call_id}"
     
     try:
-        # Generate Agora details using our service
         agora_data = AgoraService.generate_rtc_token(channel_name)
         
         # Store call start time
