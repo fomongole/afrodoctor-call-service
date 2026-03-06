@@ -6,7 +6,6 @@ import time
 
 app = FastAPI(title="AfroDoctor Call Service")
 
-# --- CORS Configuration ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
